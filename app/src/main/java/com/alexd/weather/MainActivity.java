@@ -42,6 +42,7 @@ public class MainActivity extends Activity {
     private TextView windDeg;
 
     private TextView hum;
+    private TextView date;
     private ImageView imgView;
 
     @Override
@@ -57,6 +58,7 @@ public class MainActivity extends Activity {
         windSpeed = (TextView) findViewById(R.id.windSpeed);
         windDeg = (TextView) findViewById(R.id.windDeg);
         imgView = (ImageView) findViewById(R.id.condIcon);
+        date = (TextView) findViewById(R.id.updateTime);
 
         updateWeatherData();
     }
@@ -131,8 +133,9 @@ public class MainActivity extends Activity {
             hum.setText("" + weather.currentCondition.getHumidity() + "%");
             press.setText("" + weather.currentCondition.getPressure() + " hPa");
             windSpeed.setText("" + weather.wind.getSpeed() + " mps");
-            windDeg.setText("" + weather.wind.getDeg() + "°");
-            float tempValue = weather.temperature.getTemp();
+//            windDeg.setText("" + weather.wind.getDeg() + "°");
+            date.setText(weather.currentCondition.getUpdateTime().toString());
+            double tempValue = weather.temperature.getTemp();
             temp.setTextColor(getTextColor(tempValue));
             temp.setText("" + (tempValue > 0 ? ("+" + tempValue) : tempValue) + "°C");
         }
@@ -163,7 +166,7 @@ public class MainActivity extends Activity {
 
         return cityName;
     }
-    public int getTextColor(float value){
+    public int getTextColor(double value){
         double in = value * 1.0 / 20;
         double v0 = Math.abs(in / Math.sqrt(1 + in*in));
 
