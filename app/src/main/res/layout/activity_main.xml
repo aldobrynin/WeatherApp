@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@id/condDescr"
-        android:text="Pressure"
+        android:text="Pressure:"
         android:layout_marginTop="15dp" />
 
     <TextView
@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@id/pressLab"
-        android:text="Humidity" />
+        android:text="Humidity:" />
 
     <TextView
         android:id="@+id/hum"
@@ -79,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@id/humLab"
-        android:text="Wind" />
+        android:text="Wind:" />
 
     <TextView
         android:id="@+id/windSpeed"
@@ -99,13 +99,30 @@
         android:layout_marginStart="4dp"
         style="@style/valData"/>
 
+    <TextView
+        android:id="@+id/updateTimeLab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/windLab"
+        android:text="Update time:" />
+
+    <TextView
+        android:id="@+id/updateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/updateTimeLab"
+        android:layout_toEndOf="@id/updateTimeLab"
+        android:layout_marginStart="4dp"
+        style="@style/valData" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/refresh"
         android:id="@+id/refreshButton"
         android:onClick="refreshButtonClick"
-        android:layout_centerVertical="true"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
