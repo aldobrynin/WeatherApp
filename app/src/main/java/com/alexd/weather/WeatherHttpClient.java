@@ -1,7 +1,11 @@
 package com.alexd.weather;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -52,43 +56,20 @@ public class WeatherHttpClient {
 
     }
 
-    public byte[] getImage(String code) {
-        HttpURLConnection con = null ;
-        InputStream is = null;
+    public Bitmap getImage(String code) {
         try {
             String IMG_URL = "http://openweathermap.org/img/w/";
-            con = (HttpURLConnection) ( new URL(IMG_URL + code)).openConnection();
-            con.setRequestMethod("GET");
-            con.setDoInput(true);
-            con.setDoOutput(true);
-            con.connect();
-
-            is = con.getInputStream();
-            byte[] buffer = new byte[1024];
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-            while ( is.read(buffer) != -1)
-                baos.write(buffer);
-
-            return baos.toByteArray();
+            String src = String.format("%s%s.png", IMG_URL, code);
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
-        catch(Throwable t) {
-            t.printStackTrace();
-        }
-        finally {
-            try {
-                if (is != null) {
-                    is.close();
-                }
-            } catch(Throwable ignored) {}
-            try {
-                if (con != null) {
-                    con.disconnect();
-                }
-            } catch(Throwable ignored) {}
-        }
-
-        return null;
-
     }
 }

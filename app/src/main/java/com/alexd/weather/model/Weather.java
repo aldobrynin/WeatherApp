@@ -1,5 +1,7 @@
 package com.alexd.weather.model;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by alexd on 2015-09-18.
  */
@@ -13,7 +15,7 @@ public class Weather {
     public Snow snow = new Snow()	;
     public Clouds clouds = new Clouds();
 
-    public byte[] iconData;
+    public Bitmap iconData;
 
     public  class CurrentCondition {
         private int weatherId;

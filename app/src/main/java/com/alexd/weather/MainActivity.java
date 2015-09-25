@@ -17,6 +17,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,20 +29,33 @@ import com.alexd.weather.model.Weather;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends Activity {
+    private TextView cityText;
+    private TextView condDescr;
     private TextView temp;
-    private TextView location;
+    private TextView press;
+    private TextView windSpeed;
+    private TextView windDeg;
+
+    private TextView hum;
     private ImageView imgView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        temp = (TextView) findViewById(R.id.tempTextView);
-        location = (TextView) findViewById(R.id.location);
+
+        cityText = (TextView) findViewById(R.id.cityText);
+        condDescr = (TextView) findViewById(R.id.condDescr);
+        temp = (TextView) findViewById(R.id.temp);
+        hum = (TextView) findViewById(R.id.hum);
+        press = (TextView) findViewById(R.id.press);
+        windSpeed = (TextView) findViewById(R.id.windSpeed);
+        windDeg = (TextView) findViewById(R.id.windDeg);
         imgView = (ImageView) findViewById(R.id.condIcon);
 
         updateWeatherData();
@@ -86,13 +100,6 @@ public class MainActivity extends Activity {
         String longitude = "" + loc.getLongitude();
         String latitude = "" + loc.getLatitude();
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("Location:\n");
-        sb.append("Longitude: ").append(longitude).append("\n");
-        sb.append("Latitude: ").append(latitude).append("\n");
-        sb.append("City: ").append(getCityByLocation(loc)).append("\n");
-
-        location.setText(sb.toString());
         JSONWeatherTask task = new JSONWeatherTask();
         task.execute(longitude, latitude);
     }
@@ -106,24 +113,25 @@ public class MainActivity extends Activity {
             Weather weather = new Weather();
             try {
                 weather = JSONWeatherParser.getWeather(data);
-
-                // Let's retrieve the icon
                 weather.iconData = weatherHttpClient.getImage(weather.currentCondition.getIcon());
+
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             return weather;
-
         }
 
         @Override
         protected void onPostExecute(Weather weather) {
             super.onPostExecute(weather);
-            if (weather.iconData != null && weather.iconData.length > 0) {
-                Bitmap img = BitmapFactory.decodeByteArray(weather.iconData, 0, weather.iconData.length);
-                imgView.setImageBitmap(img);
-            }
+            imgView.setImageBitmap(weather.iconData);
+            cityText.setText(weather.location.getCity() + ", " + weather.location.getCountry());
+            condDescr.setText(weather.currentCondition.getCondition() + "(" + weather.currentCondition.getDescr() + ")");
+            hum.setText("" + weather.currentCondition.getHumidity() + "%");
+            press.setText("" + weather.currentCondition.getPressure() + " hPa");
+            windSpeed.setText("" + weather.wind.getSpeed() + " mps");
+            windDeg.setText("" + weather.wind.getDeg() + "°");
             float tempValue = weather.temperature.getTemp();
             temp.setTextColor(getTextColor(tempValue));
             temp.setText("" + (tempValue > 0 ? ("+" + tempValue) : tempValue) + "°C");
