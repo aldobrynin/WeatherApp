@@ -1,23 +1,17 @@
 package com.alexd.weather;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,13 +23,12 @@ import com.alexd.weather.model.Weather;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends Activity {
     private TextView cityText;
-    private TextView condDescr;
+    private TextView condDescription;
     private TextView temp;
     private TextView press;
     private TextView windSpeed;
@@ -51,7 +44,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         cityText = (TextView) findViewById(R.id.cityText);
-        condDescr = (TextView) findViewById(R.id.condDescr);
+        condDescription = (TextView) findViewById(R.id.condDescr);
         temp = (TextView) findViewById(R.id.temp);
         hum = (TextView) findViewById(R.id.hum);
         press = (TextView) findViewById(R.id.press);
@@ -129,10 +122,10 @@ public class MainActivity extends Activity {
             super.onPostExecute(weather);
             imgView.setImageBitmap(weather.iconData);
             cityText.setText(weather.location.getCity() + ", " + weather.location.getCountry());
-            condDescr.setText(weather.currentCondition.getCondition() + "(" + weather.currentCondition.getDescr() + ")");
+            condDescription.setText(weather.currentCondition.getCondition() + "(" + weather.currentCondition.getDescr() + ")");
             hum.setText("" + weather.currentCondition.getHumidity() + "%");
             press.setText("" + weather.currentCondition.getPressure() + " hPa");
-            windSpeed.setText("" + weather.wind.getSpeed() + " mps");
+            windSpeed.setText("" + weather.wind.getSpeed() + " m/s");
 //            windDeg.setText("" + weather.wind.getDeg() + "°");
             date.setText(weather.currentCondition.getUpdateTime().toString());
             double tempValue = weather.temperature.getTemp();
@@ -144,12 +137,8 @@ public class MainActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
 
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private String getCityByLocation(Location loc){

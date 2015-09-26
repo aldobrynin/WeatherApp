@@ -67,8 +67,7 @@ public class JSONWeatherParser {
     }
 
     private static double getDouble(String tagName, JSONObject jObj) throws JSONException {
-        double res = jObj.getDouble(tagName);
-        return res;
+        return jObj.getDouble(tagName);
     }
 
     private static int  getInt(String tagName, JSONObject jObj) throws JSONException {
